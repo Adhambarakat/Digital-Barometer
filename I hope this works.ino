@@ -2,6 +2,10 @@
 #include <LiquidCrystal.h>
 #include <Keypad.h>
 
+int R = 8.314;
+double V;
+
+
 const byte ROWS = 4; 
 const byte COLS = 4; 
 
@@ -33,48 +37,53 @@ void setup() {
 }
 
 void loop() {
-   char key = keypad.getKey();
-   int n;
-   int R = 8.314;
    int T = bmp.readTemperature();
    int P = bmp.readPressure();
-   int V = (n*R*T)/P;
-
+   char key = keypad.getKey();
+   int n = - (P*V)/(R*T);
+   
 
     lcd.setCursor(0,0);
     
-  if (key == 'A'){
-    lcd.print(n);
-   
+  
+   if(key == '7'){
+    lcd.print(" T=");
+     lcd.print(bmp.readTemperature() + 273);
+     lcd.print("K  ");
   }
-  else if(key == 'B'){
-    lcd.print(T);
+  else if(key == '*'){
+    lcd.print("P=");
+     lcd.print(bmp.readPressure()/1000);
+     lcd.print("x10^3");
+     lcd.print("Pa");
   }
-  else if(key == 'C'){
-    lcd.print(P);
-  }
-  else if(key == 'D'){
-    lcd.print(V);
+  else if(key == '0'){
+    lcd.print("n = ");
+    lcd.print(n/4);
   }
   
   if(key == '2'){
-    n+=10;
+    V+=1;
   }
   else if(key == '8'){
-    n=n-10;
+    V=V-1;
   }
-  else if(key == '6'){
-    n+=1;
-  }
+
+  
   else if(key == '4'){
-    n = n-1;
+    V=V+0.10;
+  }
+  else if(key == '5'){
+    lcd.clear();
+  }
+  if (key == '1'){
+    lcd.print("V ="); 
+    lcd.print(V);
+    lcd.print("m^3");    
+   
   }
  
-}
-    else{
-      lcd.clear();
-    }
-    
+
     
     
 
